@@ -7,12 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#80ccff</color>
+    <color name="colorPrimary">#55ACE6</color>
     <color name="colorPrimaryDark">#4d79ff</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="grey">#817D7D</color>
 
-    <color name="lightBlue">#80ccff</color>
+    <color name="lightBlue">#55ACE6</color>
     <color name="mediumBlue">#4d79ff</color>
     <color name="darkBlue">#0040ff</color>
 

@@ -38,7 +38,8 @@ public class SettingsFragment extends Fragment implements AdapterNote.OnNoteList
         initRecyclerView();
 
 //        appDataBase = AppDataBase.geAppdatabase(getActivity());
-//insertFakeNotes
+
+//insertFakeNotes для примера
         for(int i = 0; i < 1000; i++){
             Note note = new Note();
             note.setTitle("title #" + i);
@@ -64,7 +65,7 @@ public class SettingsFragment extends Fragment implements AdapterNote.OnNoteList
         recyclerView.setAdapter(adapterNote);
     }
 
-    //todo: переход на фрагмент с просмотром информации
+    //done: переход на фрагмент с просмотром информации
     //NoteFragment должен получить позицию
     //в активностях: bundle и note д. б. parcelable
     @Override

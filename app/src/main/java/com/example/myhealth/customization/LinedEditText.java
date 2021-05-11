@@ -25,7 +25,7 @@ public class LinedEditText extends AppCompatEditText {
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(2);
-        mPaint.setColor(0x668CFF); // Color of the lines on paper
+        mPaint.setColor(0xFFFFD966); // Color of the lines on paper
 
     }
 
