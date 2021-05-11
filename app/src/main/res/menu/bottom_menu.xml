@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_journal"
+        android:title="Здоровье"
+        android:icon="@drawable/ic_baseline_info"/>
+
+    <item
+        android:id="@+id/nav_medication"
+        android:title="Лекарства"
+        android:icon="@drawable/ic_medicament"/>
+    <item
+        android:id="@+id/nav_settings"
+        android:title="Заметки"
+        android:icon="@drawable/ic_baseline_mode_edit_outline_24"/>
+</menu>
