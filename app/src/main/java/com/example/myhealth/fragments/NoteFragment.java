@@ -1,5 +1,6 @@
 package com.example.myhealth.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -53,10 +55,9 @@ public class NoteFragment extends Fragment implements
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_note, container, false);
         Bundle bundle=getArguments();
-        if(bundle==null){
-            throw new IllegalArgumentException("Note should not be null");
-        }
-        mNoteInitial = bundle.getParcelable("selected_note");
+//        if(bundle!=null) {
+//            mNoteInitial = bundle.getParcelable("selected_note");
+//        }
         mLinedEditText =v.findViewById(R.id.note_text);
         mEditTitle = v.findViewById(R.id.note_edit_title);
         mViewTitle = v.findViewById(R.id.note_text_title);
@@ -64,6 +65,10 @@ public class NoteFragment extends Fragment implements
         mBackArrowContainer=v.findViewById(R.id.back_arrow_container);
         mCheck=v.findViewById(R.id.toolbar_check);
         mBackArrow=v.findViewById(R.id.toolbar_back_arrow);
+
+        setListeners();
+
+
         if(getIncomingBundle()){
             //new note (edit mode)
             setNewNoteProperties();
@@ -72,18 +77,15 @@ public class NoteFragment extends Fragment implements
         else{
             // not new note (view mode)
             setNoteProperties();
+            disableContentInteraction();
         }
-        setListeners();
 
-        mViewTitle.setText(mNoteInitial.getTitle());
-        mEditTitle.setText(mNoteInitial.getTitle());
-        mLinedEditText.setText(mNoteInitial.getContent());
         return v;
     }
 
     private boolean getIncomingBundle(){
         Bundle bundle=getArguments();
-        if(bundle!=null){
+        if(bundle.getParcelable("selected_note")!=null){
             mNoteInitial =bundle.getParcelable("selected_note");
             Log.d(TAG, "getIncomingBundle:"+mNoteInitial.toString());
             mMode = EDIT_MODE_DISABLED;
@@ -95,6 +97,22 @@ public class NoteFragment extends Fragment implements
         return true;
     }
 
+    //отключим действие по одному клику
+    private void disableContentInteraction(){
+        mLinedEditText.setKeyListener(null);
+        mLinedEditText.setFocusable(false);
+        mLinedEditText.setFocusableInTouchMode(false);
+        mLinedEditText.setCursorVisible(false);
+        mLinedEditText.clearFocus();
+    }
+
+    private void enableContentInteraction(){
+        mLinedEditText.setKeyListener(new EditText(getActivity()).getKeyListener());
+        mLinedEditText.setFocusable(true);
+        mLinedEditText.setFocusableInTouchMode(true);
+        mLinedEditText.setCursorVisible(true);
+        mLinedEditText.requestFocus();
+    }
     //вкл режим ввода
     private void enabledEditMode(){
         //если вводим текст, выкл кнопку назад и вкл кнопку сохранить
@@ -105,6 +123,8 @@ public class NoteFragment extends Fragment implements
         mEditTitle.setVisibility(View.VISIBLE);
 
         mMode=EDIT_MODE_ENABLED;
+
+        enableContentInteraction();
     }
 
     private void disableEditMode(){
@@ -115,6 +135,19 @@ public class NoteFragment extends Fragment implements
         mEditTitle.setVisibility(View.GONE);
 
         mMode=EDIT_MODE_DISABLED;
+
+        disableContentInteraction();
+
+    }
+
+    //скрыть клавиатуру (при нажатии галочки)
+    private void hideSoftKeyboard(){
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getActivity().getCurrentFocus();
+        if(view==null){
+            view=new View(getActivity());
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void setNoteProperties(){
@@ -123,11 +156,10 @@ public class NoteFragment extends Fragment implements
         mLinedEditText.setText(mNoteInitial.getContent());
     }
 
-    //если заметка новая, кладем дефолтное значение
-    //frdjilghreghlrehgre
+    //если заметка новая, кладем дефолтное значение в титульник
     private void setNewNoteProperties(){
-        mViewTitle.setText("Note Title");
-        mEditTitle.setText("Note Title");
+        mViewTitle.setText("Название");
+        mEditTitle.setText("Название");
     }
 
     private void setListeners(){
@@ -136,6 +168,7 @@ public class NoteFragment extends Fragment implements
         mGestureDetector = new GestureDetector(getActivity(), this);
         mViewTitle.setOnClickListener(this);
         mCheck.setOnClickListener(this);
+        mBackArrow.setOnClickListener(this);
     }
 
     @Override
@@ -195,6 +228,7 @@ public class NoteFragment extends Fragment implements
         switch (v.getId()){
             //если нажать на галочку
             case R.id.toolbar_check:{
+                hideSoftKeyboard();
                 disableEditMode();
                 break;
             }
@@ -206,9 +240,15 @@ public class NoteFragment extends Fragment implements
                 mEditTitle.setSelection(mEditTitle.length());
                 break;
             }
+            case R.id.toolbar_back_arrow:{
+                //todo: правильно (?) описать кнопку 'назад'
+                SettingsFragment settingsFragment=new SettingsFragment();
+                getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, settingsFragment).commit();
+                break;
+            }
         }
 
-        //todo: не реализую пока т.к. и так робит вроде
+        //todo: не реализую пока т.к. и так робит вроде (работает из-за того что я добавляла фрагмент в BackStack )
         //по кнопке назад телефона вернуться на ресайклер заметок
         //onBackPressed() - override метод активности
     }

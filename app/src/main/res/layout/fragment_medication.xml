@@ -9,7 +9,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingButton"
         android:layout_width="wrap_content"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/FAB"
         android:layout_height="88dp"
         android:layout_margin="20dp"
         android:layout_gravity="bottom|end"
@@ -17,8 +17,8 @@
         app:maxImageSize="@android:dimen/app_icon_size"
         android:foregroundTint="#fff"
         android:src="@drawable/ic_add"
-        android:tint="@color/colorPrimary"
-        app:backgroundTint="@color/colorPrimary"
+        android:tint="@color/FAB"
+        app:backgroundTint="@color/FAB"
         app:tint="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
