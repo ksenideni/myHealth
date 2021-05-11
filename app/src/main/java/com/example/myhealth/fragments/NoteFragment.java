@@ -75,6 +75,7 @@ public class NoteFragment extends Fragment {
     }
 
     //если заметка новая, кладем дефолтное значение
+    //frdjilghreghlrehgre
     private void setNewNoteProperties(){
         mViewTitle.setText("Note Title");
         mEditTitle.setText("Note Title");
