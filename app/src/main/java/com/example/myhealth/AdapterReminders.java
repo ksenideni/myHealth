@@ -34,7 +34,7 @@ public class AdapterReminders extends RecyclerView.Adapter<AdapterReminders.MyVi
         if(!reminders.getMessage().equals(""))
             message.setText(reminders.getMessage());
         else
-            message.setHint("Пустое окошко");
+            message.setHint("Пустая запись");
         time.setText(reminders.getRemindDate().toString());
 
     }
@@ -43,6 +43,8 @@ public class AdapterReminders extends RecyclerView.Adapter<AdapterReminders.MyVi
     public int getItemCount() {
         return allReminders.size();
     }
+
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 

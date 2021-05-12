@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:hint="Date And Time"
+            android:hint="Дата и время"
             android:layout_gravity="center"/>
         <Button
             android:id="@+id/selectDate"
@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:gravity="center"
-            android:text="SELECT"/>
+            android:text="выбрать"/>
 
     </LinearLayout>
 
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:hint="Message"
+        android:hint="Лекарство"
         android:gravity="center"/>
 
     <Button
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Add"
+        android:text="добавить"
         android:layout_gravity="center" />
 
 </LinearLayout>

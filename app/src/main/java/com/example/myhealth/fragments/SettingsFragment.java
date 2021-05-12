@@ -31,9 +31,6 @@ public class SettingsFragment extends Fragment implements
 
 
     private static final String TAG = "NotesListFragment";
-//    private FloatingActionButton add;
-//    private Dialog dialog;
-//    private AppDataBase appDataBase;
     private RecyclerView recyclerView;
 
     private AdapterNote adapterNote;
