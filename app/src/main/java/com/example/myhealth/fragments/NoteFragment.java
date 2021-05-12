@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -18,7 +20,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.myhealth.Note;
+import com.example.myhealth.NoteRepository;
 import com.example.myhealth.R;
+import com.example.myhealth.Utility;
 import com.example.myhealth.customization.LinedEditText;
 
 
@@ -26,7 +30,8 @@ public class NoteFragment extends Fragment implements
         View.OnTouchListener,
         GestureDetector.OnGestureListener,
         GestureDetector.OnDoubleTapListener,
-        View.OnClickListener
+        View.OnClickListener,
+        TextWatcher
 {
 
     private static final String TAG = "NoteFragment";
@@ -47,8 +52,8 @@ public class NoteFragment extends Fragment implements
     //'обнаруживатель' двойного касания
     private GestureDetector mGestureDetector;
     private int mMode;
-//    private NoteRepository mNoteRepository;
-//    private Note mNoteFinal;
+    private NoteRepository mNoteRepository;
+    private Note mNoteFinal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +71,7 @@ public class NoteFragment extends Fragment implements
         mCheck=v.findViewById(R.id.toolbar_check);
         mBackArrow=v.findViewById(R.id.toolbar_back_arrow);
 
+        mNoteRepository=new NoteRepository(getActivity());
         setListeners();
 
 
@@ -87,7 +93,13 @@ public class NoteFragment extends Fragment implements
         Bundle bundle=getArguments();
         if(bundle.getParcelable("selected_note")!=null){
             mNoteInitial =bundle.getParcelable("selected_note");
-            Log.d(TAG, "getIncomingBundle:"+mNoteInitial.toString());
+
+            mNoteFinal=new Note();
+            mNoteFinal.setTitle(mNoteInitial.getTitle());
+            mNoteFinal.setContent(mNoteInitial.getContent());
+            mNoteFinal.setTimestamp(mNoteInitial.getTimestamp());
+            mNoteFinal.setId(mNoteInitial.getId());
+
             mMode = EDIT_MODE_DISABLED;
             mIsNewNote = false;
             return false;
@@ -95,6 +107,22 @@ public class NoteFragment extends Fragment implements
         mMode=EDIT_MODE_ENABLED;
         mIsNewNote=true;
         return true;
+    }
+
+    private void saveChanges(){
+        if(mIsNewNote){
+            saveNewNote();
+        }else{
+            updateNote();
+        }
+    }
+
+    private void updateNote(){
+        mNoteRepository.updateNoteTask(mNoteFinal);
+    }
+
+    private void saveNewNote(){
+        mNoteRepository.insertNoteTask(mNoteFinal);
     }
 
     //отключим действие по одному клику
@@ -127,17 +155,36 @@ public class NoteFragment extends Fragment implements
         enableContentInteraction();
     }
 
-    private void disableEditMode(){
+    private void disableEditMode() {
         mBackArrowContainer.setVisibility(View.VISIBLE);
         mCheckContainer.setVisibility(View.GONE);
 
         mViewTitle.setVisibility(View.VISIBLE);
         mEditTitle.setVisibility(View.GONE);
 
-        mMode=EDIT_MODE_DISABLED;
+        mMode = EDIT_MODE_DISABLED;
 
         disableContentInteraction();
 
+        String temp = mLinedEditText.getText().toString();
+        temp = temp.replace("\n", "");
+        temp = temp.replace(" ", "");
+        if(temp.length() > 0){
+            mNoteFinal.setTitle(mEditTitle.getText().toString());
+            mNoteFinal.setContent(mLinedEditText.getText().toString());
+            String timestamp = Utility.getCurrentTimestamp();
+            mNoteFinal.setTimestamp(timestamp);
+
+            Log.d(TAG, "disableEditMode: initial: " + mNoteInitial.toString());
+            Log.d(TAG, "disableEditMode: final: " + mNoteFinal.toString());
+
+            // If the note was altered, save it.
+            if(!mNoteFinal.getContent().equals(mNoteInitial.getContent())
+                    || !mNoteFinal.getTitle().equals(mNoteInitial.getTitle())){
+                Log.d(TAG, "disableEditMode: called?");
+                saveChanges();
+            }
+        }
     }
 
     //скрыть клавиатуру (при нажатии галочки)
@@ -160,6 +207,11 @@ public class NoteFragment extends Fragment implements
     private void setNewNoteProperties(){
         mViewTitle.setText("Название");
         mEditTitle.setText("Название");
+
+        mNoteInitial = new Note();
+        mNoteFinal = new Note();
+        mNoteInitial.setTitle("Название");
+        mNoteFinal.setTitle("Название");
     }
 
     private void setListeners(){
@@ -169,6 +221,7 @@ public class NoteFragment extends Fragment implements
         mViewTitle.setOnClickListener(this);
         mCheck.setOnClickListener(this);
         mBackArrow.setOnClickListener(this);
+        mEditTitle.addTextChangedListener(this);
     }
 
     @Override
@@ -251,5 +304,20 @@ public class NoteFragment extends Fragment implements
         //todo: не реализую пока т.к. и так робит вроде (работает из-за того что я добавляла фрагмент в BackStack )
         //по кнопке назад телефона вернуться на ресайклер заметок
         //onBackPressed() - override метод активности
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        mViewTitle.setText(s.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

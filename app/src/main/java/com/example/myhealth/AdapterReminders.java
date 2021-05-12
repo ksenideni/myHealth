@@ -34,7 +34,7 @@ public class AdapterReminders extends RecyclerView.Adapter<AdapterReminders.MyVi
         if(!reminders.getMessage().equals(""))
             message.setText(reminders.getMessage());
         else
-            message.setHint("No Message");
+            message.setHint("Пустое окошко");
         time.setText(reminders.getRemindDate().toString());
 
     }

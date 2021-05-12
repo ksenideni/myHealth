@@ -1,5 +1,6 @@
 package com.example.myhealth;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class AdapterNote extends RecyclerView.Adapter<AdapterNote.ViewHolder> {
 
+    private static final String TAG = "AdapterNote";
     private ArrayList<Note> mNotes = new ArrayList<>();
     private OnNoteListener onNoteListener;
 
@@ -32,8 +34,18 @@ public class AdapterNote extends RecyclerView.Adapter<AdapterNote.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 
-        holder.timestamp.setText(mNotes.get(position).getTimestamp());
-        holder.title.setText(mNotes.get(position).getTitle());
+        try{
+            String month=mNotes.get(position).getTimestamp().substring(0,2);
+            month=Utility.getMonthFromNumber(month);
+            String year = mNotes.get(position).getTimestamp().substring(3);
+            String timestamp = month + " " + year;
+
+            holder.timestamp.setText(mNotes.get(position).getTimestamp());
+            holder.title.setText(mNotes.get(position).getTitle());
+        }catch (NullPointerException e){
+            Log.e(TAG, "onBindViewHolder: NullPointerException" + e.getMessage());
+        }
+
     }
 
     @Override

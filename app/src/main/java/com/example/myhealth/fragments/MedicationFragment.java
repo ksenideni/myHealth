@@ -129,7 +129,7 @@ public class MedicationFragment extends Fragment {
                                 if(newDate.getTimeInMillis()-tem.getTimeInMillis()>0)
                                     textView.setText(newDate.getTime().toString());
                                 else
-                                    Toast.makeText(getActivity(),"Invalid time",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(),"Неверное время",Toast.LENGTH_SHORT).show();
 
                             }
                         },newTime.get(Calendar.HOUR_OF_DAY),newTime.get(Calendar.MINUTE),true);
@@ -170,7 +170,7 @@ public class MedicationFragment extends Fragment {
                 AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),intent1);
 
-                Toast.makeText(getActivity(),"Inserted Successfully",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Успешно добавлено",Toast.LENGTH_SHORT).show();
                 setItemsInRecyclerView();
                 AppDataBase.destroyInstance();
                 dialog.dismiss();

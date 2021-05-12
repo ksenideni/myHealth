@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
@@ -16,8 +18,13 @@ public class Note implements Parcelable {
     @NonNull
     public int id;
 
+    @ColumnInfo(name="title")
     private String title;
+
+    @ColumnInfo(name="content")
     private String content;
+
+    @ColumnInfo(name="timestamp")
     private String timestamp;
 
     public Note(String title, String content, String timestamp) {
@@ -26,9 +33,28 @@ public class Note implements Parcelable {
         this.timestamp = timestamp;
     }
 
+    @Ignore
     public Note() {
-
     }
+
+    protected Note(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        content = in.readString();
+        timestamp = in.readString();
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
 
     public int getId() {
         return id;

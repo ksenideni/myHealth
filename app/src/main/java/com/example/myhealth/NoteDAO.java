@@ -1,5 +1,6 @@
 package com.example.myhealth;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -11,14 +12,14 @@ import java.util.List;
 @Dao
 public interface NoteDAO {
     @Insert
-    public void Insert(Note... note);
+    long[] InsertNotes(Note... notes);
 
     @Update
-    public void Update(Note... note);
+    int UpdateNotes(Note... notes);
 
     @Delete
-    public void Delete(Note note);
+    int DeleteNotes(Note... notes);
 
     @Query("Select * from note_table")
-    public List<Note> getAllNotes();
+    LiveData<List<Note>> getNotes();
 }

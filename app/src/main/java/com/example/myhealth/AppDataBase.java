@@ -17,6 +17,7 @@ public abstract class AppDataBase extends RoomDatabase {
     public abstract RoomDAO getRoomDAO();
     public abstract NoteDAO getNoteDAO();
 
+    //users - имя бд
     public static AppDataBase geAppdatabase(Context context){
 
         if(INSTANCE==null){
@@ -24,7 +25,6 @@ public abstract class AppDataBase extends RoomDatabase {
                     .allowMainThreadQueries()
                     .build();
         }
-
         return INSTANCE;
     }
 
