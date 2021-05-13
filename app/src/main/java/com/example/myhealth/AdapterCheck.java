@@ -3,6 +3,7 @@ package com.example.myhealth;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,10 +11,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AdapterCheck extends RecyclerView.Adapter<AdapterCheck.CheckViewHolder> {
     private Course course;
+    private AppDataBase appDataBase1;
 
-    public AdapterCheck(Course course){
-        this.course=course;
+    private int done_courses;
+    public int getDone_courses() {
+        return done_courses;
     }
+    public void setDone_courses(int done_courses) {
+        this.done_courses = done_courses;
+    }
+
+    public AdapterCheck(Course course, AppDataBase appDataBase){
+        this.course=course;
+        this.appDataBase1=appDataBase;
+    }
+
+
 
 
 
@@ -26,7 +39,26 @@ public class AdapterCheck extends RecyclerView.Adapter<AdapterCheck.CheckViewHol
 
     @Override
     public void onBindViewHolder(@NonNull CheckViewHolder holder, int position) {
-        holder.days.setText(position+1 + "день");
+
+        holder.checkBox.setChecked(course.getDone()>position);
+
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((CheckBox)v).isChecked()){
+                    course.setDone(course.getDone()+1);
+                    appDataBase1.getCourseDAO().UpdateCourse(course);
+                }
+                else {
+                    course.setDone(course.getDone() - 1);
+                    appDataBase1.getCourseDAO().UpdateCourse(course);
+                }
+            }
+        });
+        holder.days.setText(position+1 + " день");
+        if(position<done_courses){
+            holder.checkBox.setChecked(true);
+        }
     }
 
     @Override
@@ -37,9 +69,15 @@ public class AdapterCheck extends RecyclerView.Adapter<AdapterCheck.CheckViewHol
 
     public class CheckViewHolder extends RecyclerView.ViewHolder{
         private TextView days;
+
+        private CheckBox checkBox;
+        public CheckBox getCheckBox() {
+            return checkBox;
+        }
         public CheckViewHolder(@NonNull View itemView) {
             super(itemView);
             days=itemView.findViewById(R.id.tv_days);
+            checkBox=itemView.findViewById(R.id.checkBox);
         }
     }
 }

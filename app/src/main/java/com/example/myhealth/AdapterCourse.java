@@ -16,12 +16,20 @@ import java.util.ArrayList;
 
 public class AdapterCourse extends RecyclerView.Adapter<AdapterCourse.CourseViewHolder> {
 
+    private int done_course;
+    private  AppDataBase appDataBase;
+
     private ArrayList<Course> allCourses;
     //поля для лекарстава и длительности приема
 
 
-    public AdapterCourse(ArrayList<Course> courses){
+    public ArrayList<Course> getAllCourses() {
+        return allCourses;
+    }
+
+    public AdapterCourse(ArrayList<Course> courses, AppDataBase appDataBase){
         this.allCourses=courses;
+        this.appDataBase=appDataBase;
     }
 
 
@@ -35,16 +43,21 @@ public class AdapterCourse extends RecyclerView.Adapter<AdapterCourse.CourseView
     //todo логика добавления
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
+
+
         Course course = allCourses.get(position);
+
         holder.medication.setText(course.getMedication());
-        holder.duration.setText(course.getDuration()+"дней");
+        //holder.duration.setText(course.getDuration()+"дней");
 
-        GridLayoutManager gridLayout=new GridLayoutManager((Activity)holder.itemView.getContext(), course.getDuration());
-        holder.rvCheckBox.setLayoutManager(gridLayout);
-        AdapterCheck adapterCheck=new AdapterCheck(course);
+        GridLayoutManager gridLayoutManager= new GridLayoutManager(holder.itemView.getContext(), 1, GridLayoutManager.HORIZONTAL, false);
+        holder.rvCheckBox.setLayoutManager(gridLayoutManager);
+
+//        GridLayoutManager gridLayout=new GridLayoutManager((Activity)holder.itemView.getContext(), course.getDuration());
+        holder.rvCheckBox.setLayoutManager(gridLayoutManager);
+        AdapterCheck adapterCheck=new AdapterCheck(course, appDataBase);
+        adapterCheck.setDone_courses(course.getDone());
         holder.rvCheckBox.setAdapter(adapterCheck);
-
-
     }
 
     @Override
@@ -54,14 +67,16 @@ public class AdapterCourse extends RecyclerView.Adapter<AdapterCourse.CourseView
 
 
     public class CourseViewHolder extends RecyclerView.ViewHolder {
-        private TextView medication, duration;
-        //ресайклер галочек и адаптер галочек
+        private TextView medication;
+
+        //private TextView duration;
+        //ресайклер галочек
         private RecyclerView rvCheckBox;
         //  private AdapterCheck adapterCheck;
         public CourseViewHolder(@NonNull View itemView) {
             super(itemView);
             medication=itemView.findViewById(R.id.tv_medication);
-            duration=itemView.findViewById(R.id.tv_duration);
+            //duration=itemView.findViewById(R.id.tv_duration);
             rvCheckBox=itemView.findViewById(R.id.rv_check_mark);
 
         }

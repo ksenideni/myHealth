@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 //синглтон, не будет нескольких экземпляров бд
-@Database(entities = {Reminders.class, Note.class},version = 1)
+@Database(entities = {Reminders.class, Note.class, Course.class},version = 1)
 @TypeConverters({DateTypeConverter.class})
 public abstract class AppDataBase extends RoomDatabase {
 
@@ -16,6 +16,7 @@ public abstract class AppDataBase extends RoomDatabase {
 
     public abstract RoomDAO getRoomDAO();
     public abstract NoteDAO getNoteDAO();
+    public abstract CourseDAO getCourseDAO();
 
     //users - имя бд
     public static AppDataBase geAppdatabase(Context context){
