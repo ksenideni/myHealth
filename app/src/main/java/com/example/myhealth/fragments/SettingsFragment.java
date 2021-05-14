@@ -19,7 +19,6 @@ import com.example.myhealth.Note;
 import com.example.myhealth.NoteRepository;
 import com.example.myhealth.R;
 import com.example.myhealth.customization.VerticalSpacingItemDecorator;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;

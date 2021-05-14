@@ -6,7 +6,6 @@ import android.util.Log;
 import com.example.myhealth.Note;
 import com.example.myhealth.NoteDAO;
 
-import java.nio.channels.AsynchronousChannelGroup;
 
 public class InsertAsyncTask extends AsyncTask<Note, Void, Void> {
 

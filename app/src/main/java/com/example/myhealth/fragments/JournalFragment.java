@@ -3,7 +3,6 @@ package com.example.myhealth.fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import com.example.myhealth.Course;
 import com.example.myhealth.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,7 +28,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     private AppDataBase appDataBase;
     private RecyclerView rvCourses;
     private AdapterCourse adapterCourse;
-    private ArrayList<Course> allCourses=new ArrayList<>();
+    private ArrayList<Course> allCourses = new ArrayList<>();
 
 
     @Override
@@ -39,9 +37,9 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
         appDataBase = AppDataBase.geAppdatabase(getActivity());
         View v = inflater.inflate(R.layout.fragment_journal, container, false);
-        rvCourses=v.findViewById(R.id.rv_courses);
-        fb=v.findViewById(R.id.fb_journal);
-                fb.setOnClickListener(this);
+        rvCourses = v.findViewById(R.id.rv_courses);
+        fb = v.findViewById(R.id.fb_journal);
+        fb.setOnClickListener(this);
 //        for(int i=0; i<2; i++){
 //            Course course=new Course(2, i+7, "name"+i );
 //
@@ -61,8 +59,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.RIGHT){
-                    Course course=((AdapterCourse)rvCourses.getAdapter()).getAllCourses().get(viewHolder.getAdapterPosition());
+                if (direction == ItemTouchHelper.RIGHT) {
+                    Course course = ((AdapterCourse) rvCourses.getAdapter()).getAllCourses().get(viewHolder.getAdapterPosition());
                     appDataBase.getCourseDAO().DeleteCourse(course);
                 }
             }
@@ -73,17 +71,16 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         return v;
     }
 
-    void initRecyclerView(){
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
+    void initRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvCourses.setLayoutManager(linearLayoutManager);
-        adapterCourse=new AdapterCourse(allCourses, appDataBase);
+        adapterCourse = new AdapterCourse(allCourses, appDataBase);
         rvCourses.setAdapter(adapterCourse);
-
     }
 
     @Override
     public void onClick(View v) {
-        CourseFragment courseFragment=new CourseFragment();
+        CourseFragment courseFragment = new CourseFragment();
         Bundle bundle = new Bundle();
         courseFragment.setArguments(bundle);
         getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, courseFragment).addToBackStack(null).commit();

@@ -1,22 +1,18 @@
 package com.example.myhealth;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class AdapterCourse extends RecyclerView.Adapter<AdapterCourse.CourseViewHolder> {
 
-    private int done_course;
     private  AppDataBase appDataBase;
 
     private ArrayList<Course> allCourses;
@@ -40,7 +36,7 @@ public class AdapterCourse extends RecyclerView.Adapter<AdapterCourse.CourseView
         return new CourseViewHolder(v);
     }
 
-    //todo логика добавления
+    //done логика добавления
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
 
